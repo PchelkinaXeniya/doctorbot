@@ -5,5 +5,6 @@ theme: /
         q!: $regex</start>
         a: Здравствуйте!
         
-    
-    state: 
+    state: doctorFind
+        q!: * $doctors *
+        a: Есть такой
