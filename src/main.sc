@@ -4,6 +4,8 @@ theme: /
     state: Start
         q!: $regex</start>
         a: Здравствуйте!
+        script:
+            $session = {};
         
     state: checkDoctor
         q!: * ({$doctor * $medic} | $doctor) *
@@ -19,8 +21,6 @@ theme: /
     state: checkRequest
         q!: * $medic *
         if: $session.clientID
-            script:
-                log($session.clientID)
             go!: /specifySpecialty
         else:
             go!: /specifyId
@@ -34,14 +34,18 @@ theme: /
         elseif: $temp.lengthId < 9
             go!: /numberShort
         elseif: $session.clientID && !$session.specialist
+            script:
+                log("BKSCCNJCNSCNNCJSCNSKCCKJNSC " + $session.clientID)
             go!: /specifySpecialty
         elseif: $session.clientID && $session.specialist
             go!: /printShedule
-        else:
+        elseif: !$session.clientID
             go!: /operator
     
     state: printShedule
         a: Расписание
+        script:
+            $jsapi.stopSession();
         
     state: specifySpecialty
         a: Уточните, пожалуйста, специальность врача, чтобы узнать расписание.
