@@ -44,6 +44,16 @@ theme: /
         
     state: numberShort
         a: Вы назвали меньше цифр, чем нужно. Попробуйте ещё раз.
+        
+    state: operator
+        a: Соединяю с оператором
+        script:
+            $response.replies.push({
+                "type": "switch",
+                "phoneNumber": "79123456789",
+                "continueCall": true,
+                "continueRecording": true
+            });
     
     state: NoMatch || noContext = true
         event!: noMatch
