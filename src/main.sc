@@ -10,34 +10,35 @@ theme: /
         if: $session.clientID
             a: $parseTree.text
         else:
-            a: Пожалуйста, назовите ваш идентификационный номер.
+            go!: /specifyId
         
     state: checkRequest
         q!: * $medic *
         if: $session.clientID
             go!: /specifySpecialty
         else:
-            a: Пожалуйста, назовите ваш идентификационный номер.  
+            go!: /specifyId
     
     state: authUser
         q!: * $digit *
         script:
             var text = $parseTree.text;
-            if (el.match(/\d+/)){
-                var number = el.match(/\d+/)[0];
-                if (number.length > 9){
-                    console.log("more 9");
-                }
-                else if (number.length < 9){
-                    console.log("less 9");
+            if (text.match(/\d+/)){
+                var number = text.match(/\d+/)[0];
+                if (number.length != 9){
+                    $session.lengthId = number.length
                 }
                 else{
                     if (findClient(number))
                         $session.clientID = number
                 }
             }
-        if: $session.clientID && $session.speciality
-            go!: /
+        if: $session.lengthId > 9
+            go!: /numberLong
+        elseif: $session.lengthId < 9
+            go!: /numberShort
+        elseif: $session.clientID
+            go!: /sayShedule
     
     state: sayShedule
         a: Расписание
@@ -47,6 +48,12 @@ theme: /
         
     state: specifyId
         a: Пожалуйста, назовите ваш идентификационный номер.
+        
+    state: numberLong
+        a: Вы назвали больше цифр, чем нужно. Попробуйте ещё раз.
+        
+    state: numberShort
+        a: Вы назвали меньше цифр, чем нужно. Попробуйте ещё раз.
     
     state: NoMatch || noContext = true
         event!: noMatch
