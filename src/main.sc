@@ -7,14 +7,20 @@ theme: /
         
     state: checkDoctor
         q!: * ({$doctor * $medic} | $doctor) *
-        if: $session.clientID
-            a: $parseTree.text
-        else:
+        script:
+            parseDoctor($parseTree, $session);
+        if: !$session.clientID 
             go!: /specifyId
+        elseif: !$session.specialist
+            a: /specifySpecialty
+        else:
+            go!: /printShedule
         
     state: checkRequest
         q!: * $medic *
         if: $session.clientID
+            script:
+                log($session.clientID)
             go!: /specifySpecialty
         else:
             go!: /specifyId
@@ -27,10 +33,14 @@ theme: /
             go!: /numberLong
         elseif: $temp.lengthId < 9
             go!: /numberShort
-        elseif: $session.clientID
-            go!: /sayShedule
+        elseif: $session.clientID && !$session.specialist
+            go!: /specifySpecialty
+        elseif: $session.clientID && $session.specialist
+            go!: /printShedule
+        else:
+            go!: /operator
     
-    state: sayShedule
+    state: printShedule
         a: Расписание
         
     state: specifySpecialty
