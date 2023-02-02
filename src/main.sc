@@ -22,7 +22,7 @@ theme: /
     state: authUser
         q!: * $digit *
         script:
-            
+            parseDidgit($parseTree, $session, $temp);
         if: $temp.lengthId > 9
             go!: /numberLong
         elseif: $temp.lengthId < 9
