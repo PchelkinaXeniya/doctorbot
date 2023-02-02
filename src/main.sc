@@ -26,16 +26,16 @@ theme: /
             if (text.match(/\d+/)){
                 var number = text.match(/\d+/)[0];
                 if (number.length != 9){
-                    $session.lengthId = number.length
+                    $temp.lengthId = number.length
                 }
                 else{
                     if (findClient(number))
                         $session.clientID = number
                 }
             }
-        if: $session.lengthId > 9
+        if: $temp.lengthId > 9
             go!: /numberLong
-        elseif: $session.lengthId < 9
+        elseif: $temp.lengthId < 9
             go!: /numberShort
         elseif: $session.clientID
             go!: /sayShedule
