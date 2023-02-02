@@ -41,11 +41,11 @@ theme: /
             go!: /operator
         elseif: $session.clientID && !$session.specialist
             go!: /specifySpecialty
-        elseif: $session.clientID
-            go!: /operator
+        elseif: $session.clientID && !$session.specialist
+            go!: /printShedule
     
     #Work in progress
-    state: sayShedule
+    state: printShedule
         a: Расписание
         
     state: specifySpecialty
