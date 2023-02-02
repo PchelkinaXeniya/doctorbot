@@ -37,9 +37,14 @@ theme: /
             go!: /numberLong
         elseif: $temp.lengthId < 9
             go!: /numberShort
+        elseif: $temp.lengthId === 9 && !$session.clientID
+            go!: /operator
+        elseif: $session.clientID && !$session.specialist
+            go!: /specifySpecialty
         elseif: $session.clientID
-            go!: /sayShedule
+            go!: /operator
     
+    #Work in progress
     state: sayShedule
         a: Расписание
         
@@ -55,6 +60,16 @@ theme: /
     state: numberShort
         a: Вы назвали меньше цифр, чем нужно. Попробуйте ещё раз.
     
+    state: operator
+        a: Соединяю с оператором
+        script:
+            $response.replies.push({
+                "type": "switch",
+                "phoneNumber": "79123456789",
+                "continueCall": true,
+                "continueRecording": true
+            });
+                    
     state: NoMatch || noContext = true
         event!: noMatch
         random:
