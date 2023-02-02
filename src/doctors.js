@@ -7,5 +7,5 @@ var doctors = {
  };
 
 function findBySpecialist(specialist){
-    return
+    
 }
