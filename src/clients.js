@@ -17,8 +17,9 @@ function parseDidgit($parseTree, $session, $temp){
             $temp.lengthId = number.length
         }
         else{
-            if (findClient(number))
+            if (findClient(number)){
                 $session.clientID = number
+            }
         }
     }
 }
