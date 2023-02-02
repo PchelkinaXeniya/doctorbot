@@ -22,30 +22,15 @@ theme: /
     state: authUser
         q!: * $digit *
         script:
-            var text = $parseTree.text;
-            if (text.match(/\d+/)){
-                var number = text.match(/\d+/)[0];
-                if (number.length != 9){
-                    $temp.lengthId = number.length
-                }
-                else{
-                    if (findClient(number))
-                        $session.clientID = number
-                }
-            }
+            
         if: $temp.lengthId > 9
             go!: /numberLong
         elseif: $temp.lengthId < 9
             go!: /numberShort
-        elseif: $temp.lengthId === 9 && !$session.clientID
-            go!: /operator
-        elseif: $session.clientID && !$session.specialist
-            go!: /specifySpecialty
-        elseif: $session.clientID && !$session.specialist
-            go!: /printShedule
+        elseif: $session.clientID
+            go!: /sayShedule
     
-    #Work in progress
-    state: printShedule
+    state: sayShedule
         a: Расписание
         
     state: specifySpecialty
@@ -60,16 +45,6 @@ theme: /
     state: numberShort
         a: Вы назвали меньше цифр, чем нужно. Попробуйте ещё раз.
     
-    state: operator
-        a: Соединяю с оператором
-        script:
-            $response.replies.push({
-                "type": "switch",
-                "phoneNumber": "79123456789",
-                "continueCall": true,
-                "continueRecording": true
-            });
-                    
     state: NoMatch || noContext = true
         event!: noMatch
         random:
